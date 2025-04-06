@@ -44,8 +44,17 @@ class ParentNode(HTMLNode):
             raise ValueError("Must contain a tag")
         if self.children == None: 
             raise ValueError("This node type requires children")
+        final_string = ""
+        for child_node in self.children:
+            if isinstance(child_node,list):
+                return self.to_html()
+            else:
+                final_string += child_node.to_html()
+        return f"<{self.tag}>{final_string}</{self.tag}>"
+    
+
+
+        
         
         
 
-
-        return super().to_html()
