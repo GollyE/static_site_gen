@@ -16,6 +16,26 @@ def main():
     delimiter = "##"
     text_type = TextType.BOLD
     result = split_nodes_delimiter(old_nodes, delimiter, text_type)
-    print(result)
+    #print(result)
+
+    # matches = extract_markdown_links(
+    #         "This is text with a link [to boot dev](https://www.boot.dev) and [to youtube](https://www.youtube.com/@bootdotdev)"
+    #     )
+    # print(matches)
+
+    node = TextNode(
+        "This is text with an ![image](https://i.imgur.com/zjjcJKZ.png) and another ![second image](https://i.imgur.com/3elNhQu.png)",
+        TextType.TEXT,
+    )
+    node2 = TextNode(
+                "This is 2text with an ![2image](https://i.22imgur.com/zjjcJKZ.png) and another ![second image](https://i.imgur.com/3elNhQu.png)",
+                TextType.TEXT,
+            )
+
+    new_nodes = split_nodes_image([node,node2])
+    print(f"the new nodes are: {new_nodes}")
+
+
+
 main()
 
