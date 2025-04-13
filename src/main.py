@@ -24,15 +24,16 @@ def main():
     # print(matches)
 
     node = TextNode(
-        "This is text with an ![image](https://i.imgur.com/zjjcJKZ.png) and another ![second image](https://i.imgur.com/3elNhQu.png)",
+        "This is text with a [link](https://boot.dev) and [another link](https://blog.boot.dev) with text that follows",
         TextType.TEXT,
     )
+
     node2 = TextNode(
                 "This is 2text with an ![2image](https://i.22imgur.com/zjjcJKZ.png) and another ![second image](https://i.imgur.com/3elNhQu.png)",
                 TextType.TEXT,
             )
 
-    new_nodes = split_nodes_image([node,node2])
+    new_nodes = split_nodes_link([node])
     print(f"the new nodes are: {new_nodes}")
 
 

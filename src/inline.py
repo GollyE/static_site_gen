@@ -65,16 +65,24 @@ def split_nodes_image(old_nodes):
                 else:
                     extracted_images_list = extract_markdown_images(old_node.text)
                     splits_required = len(extracted_images_list)
+                    print(f"the splits required are: {splits_required}")
                     sections = old_node.text
                     for item_num in range(0, splits_required):
                         image = extracted_images_list[item_num][0]
                         image_link = extracted_images_list[item_num][1]
                         sections = sections.split(
                             f"![{image}]({image_link})", 1)
+                        print(f"the split sections are: {sections}")
                         if len(sections) != 2:
                             raise ValueError("invalid markdown, image section not closed")
-                        split_nodes_list.append(TextNode(sections[0],TextType.TEXT))
-                        split_nodes_list.append(TextNode(image,TextType.IMAGE,image_link))
+                        elif sections[0]=="":
+                            split_nodes_list.append(TextNode(image,TextType.IMAGE,image_link))
+                        else:    
+                            split_nodes_list.append(TextNode(sections[0],TextType.TEXT))
+                            split_nodes_list.append(TextNode(image,TextType.IMAGE,image_link))
+                            original_text = sections[1]
+                            if item_num == (splits_required-1) and original_text != "":
+                                split_nodes_list.append(TextNode(original_text, TextType.TEXT))
                         sections = sections[1]
                 new_list.extend(split_nodes_list)
             case _:
@@ -97,17 +105,27 @@ def split_nodes_link(old_nodes):
                 else:
                     extracted_links_list = extract_markdown_links(old_node.text)
                     splits_required = len(extracted_links_list)
+                    print(f"splits required are: {splits_required}")
                     sections = old_node.text
                     for item_num in range(0, splits_required):
                         link = extracted_links_list[item_num][0]
                         link_link = extracted_links_list[item_num][1]
                         sections = sections.split(
                             f"[{link}]({link_link})", 1)
+                        print(f"before the if's, section 0 equal to {sections[0]}")
                         if len(sections) != 2:
                             raise ValueError("invalid markdown, link section not closed")
-                        split_nodes_list.append(TextNode(sections[0],TextType.TEXT))
-                        split_nodes_list.append(TextNode(link,TextType.LINK,link_link))
+                        elif sections[0]=="":
+                            split_nodes_list.append(TextNode(link,TextType.LINK,link_link))
+                        else:
+                            split_nodes_list.append(TextNode(sections[0],TextType.TEXT))
+                            split_nodes_list.append(TextNode(link,TextType.LINK,link_link))
+                            original_text = sections[1]
+                            if item_num == (splits_required-1) and original_text != "":
+                                split_nodes_list.append(TextNode(original_text, TextType.TEXT))
+                        print(f"the sections in {item_num} times through loop are {sections}")
                         sections = sections[1]
+                        
                 new_list.extend(split_nodes_list)
             case _:
                 new_list.append(old_node)
