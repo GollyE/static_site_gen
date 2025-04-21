@@ -8,9 +8,9 @@ from pathlib import Path
 
 
 def main():
-    #delete_and_copy()
-    title = (extract_title("This is normal text\n\n# heading1   \n\n\n\n"))
-    print(f"the title is {title} and it is {len(title)} long")
+    delete_and_copy('public','static')
+    #title = (extract_title("This is normal text\n\n# heading1   \n\n\n\n"))
+    #print(f"the title is {title} and it is {len(title)} long")
     return 
 
 def delete_contents(folder_path):
@@ -24,7 +24,10 @@ def delete_contents(folder_path):
         except Exception as e:
             print(f'Failed to delete {file_path}. Reason: {e}')
 
-def delete_and_copy():
+def delete_and_copy(dest_rel_path="",source_rel_path=""):
+    public_folder = os.path.normpath(os.path.join(current_dir, '..', dest_rel_path))
+    static_folder = os.path.normpath(os.path.join(current_dir, '..', source_rel_path))
+
     delete_contents(public_folder)
     base_dir = Path("static")
     #print(f"the path is {base_dir}")
@@ -32,7 +35,7 @@ def delete_and_copy():
     tree_list = os.listdir(static_folder)
     #print(tree_list, static_folder)
     
-    copy_files(tree_list,static_folder)
+    copy_files(tree_list,static_folder,public_folder)
     #for item in tree_list:
     #    print(f" the item is a file? {os.path.isfile(os.path.join(static_folder,item))}")
     return 
@@ -65,8 +68,8 @@ def copy_files(parent_directory_list, current_filepath="",dest_path=""):
     return 
 if __name__ == "__main__":
     current_dir = os.path.dirname(__file__)
-    public_folder = os.path.normpath(os.path.join(current_dir, '..', 'public'))
-    static_folder = os.path.normpath(os.path.join(current_dir, '..', 'static'))
+#    public_folder = os.path.normpath(os.path.join(current_dir, '..', 'public'))
+#    static_folder = os.path.normpath(os.path.join(current_dir, '..', 'static'))
     
 main()
 
