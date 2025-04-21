@@ -177,5 +177,29 @@ the **same** even with inline stuff
             "<div><pre><code>This is text that _should_ remain\nthe **same** even with inline stuff\n</code></pre></div>",
         )
 
+
+def test_single_h1(self):
+    md = "# Welcome to my site"
+    self.assertEqual(extract_title(md), ["Welcome to my site"])
+
+def test_multiple_h1(self):
+    md = "# First Heading\nSome paragraph\n# Second Heading"
+    self.assertEqual(extract_title(md), ["First Heading", "Second Heading"])
+
+def test_no_h1(self):
+    md = "## Subheading\nSome text\n### Smaller heading"
+    self.assertEqual(extract_title(md), [])
+
+def test_mixed_headings(self):
+    md = "# Main Heading\n## Subheading\n# Another Main Heading\nText"
+    self.assertEqual(extract_title(md), ["Main Heading", "Another Main Heading"])
+
+def test_h1_with_extra_spaces(self):
+    md = "#    Heading with spaces   "
+    self.assertEqual(extract_title(md), ["Heading with spaces"])
+
+
+
+
 if __name__ == "__main__":
     unittest.main()

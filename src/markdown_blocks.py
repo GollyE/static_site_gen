@@ -81,7 +81,7 @@ def markdown_to_html_node(markdown):
             block_child_list.append(handle_ordered_list_block(block))
 
     parent_node.children = block_child_list
-    print(f"The parent node html is: {parent_node.to_html()}")
+    #print(f"The parent node html is: {parent_node.to_html()}")
     return parent_node
 
 def text_to_children(text):
@@ -180,3 +180,18 @@ def handle_ordered_list_block(ordered_block):
         children = text_to_children(text)
         html_items.append(ParentNode("li", children))
     return ParentNode("ol", html_items)
+
+def extract_title(markdown):
+    blocks = markdown_to_blocks(markdown)
+    #print(f"the blocks of markdown are: {blocks}")
+    for item in blocks:
+        #print(f"the item is: {item}")
+        item_block_type = block_to_block_type(item)
+        if item_block_type == BlockType.HEADING:
+            heading_node = handle_heading_block(item)
+            #print(f"The heading node is: {heading_node}")
+            if heading_node.tag == "h1":
+                #print('found the title')
+                return heading_node.children[0].value
+    raise Exception("No H1 Heading Found")
+    
