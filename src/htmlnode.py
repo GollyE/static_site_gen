@@ -28,15 +28,22 @@ class LeafNode(HTMLNode):
         super().__init__(tag, value,None,props)
 
     def to_html(self):
-        if self.value == None or self.value == "":
-            raise ValueError("All leaf nodes must have a value")
-        if self.tag == None:
-            return f"{self.value}"
-        elif self.props != None:
-            html_tag =  f"<{self.tag}{self.props_to_html()}>{self.value}</{self.tag}>"
-        else:
-            html_tag =  f"<{self.tag}>{self.value}</{self.tag}>"
-        return html_tag
+        if self.tag is None:
+            return self.value or ""
+            
+        # For leaf nodes (no children)
+        if self.children is None:
+            if self.value is None:
+                return f"<{self.tag}{self.props_to_html()}/>"  # Self-closing tag
+            else:
+                return f"<{self.tag}{self.props_to_html()}>{self.value}</{self.tag}>"
+        
+        # For nodes with children
+        children_html = ""
+        for child in self.children:
+            children_html += child.to_html()
+        
+        return f"<{self.tag}{self.props_to_html()}>{children_html}</{self.tag}>"
 
 class ParentNode(HTMLNode):
     def __init__(self, tag, children, props=None):
@@ -45,15 +52,19 @@ class ParentNode(HTMLNode):
     def to_html(self):
         if self.tag is None:
             raise ValueError("invalid HTML: no tag")
+            
+        # Special case for leaf nodes (no children, just value)
         if self.children is None:
-            raise ValueError("invalid HTML: no children")
+            if self.value is None:
+                return f"<{self.tag}{self.props_to_html()}/>"  # Self-closing tag
+            else:
+                return f"<{self.tag}{self.props_to_html()}>{self.value}</{self.tag}>"
+        
+        # For nodes with children
         children_html = ""
         for child in self.children:
             children_html += child.to_html()
         return f"<{self.tag}{self.props_to_html()}>{children_html}</{self.tag}>"
-
-
-
 
         
         

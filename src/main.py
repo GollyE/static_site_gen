@@ -5,12 +5,14 @@ from markdown_blocks import *
 import os
 import shutil
 from pathlib import Path
+from generate_page import *
 
 
 def main():
     delete_and_copy('public','static')
     #title = (extract_title("This is normal text\n\n# heading1   \n\n\n\n"))
     #print(f"the title is {title} and it is {len(title)} long")
+    generate_page("content/index.md", "template.html", "public/index.html")
     return 
 
 def delete_contents(folder_path):
@@ -45,7 +47,7 @@ def copy_files(parent_directory_list, current_filepath="",dest_path=""):
     #print(f"the cfp is {current_filepath}")
     
     if dest_path == "":
-        dest_path = public_folder
+        dest_path = 'public'
     #print(f"the dest_path is {dest_path}")
     os.makedirs(dest_path, exist_ok=True)
     paths = []
