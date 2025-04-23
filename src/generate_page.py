@@ -24,4 +24,18 @@ def generate_page(rel_from_path, rel_template_path,rel_dest_path):
     # Write to destination file
     with open(rel_dest_path, 'w') as dest_file:
         dest_file.write(final_html_content)
+
+def generate_pages_recursive(dir_path_content, template_path, dest_dir_path):
     
+    for filename in os.listdir(dir_path_content):
+        file_path = os.path.join(folder_path, filename)
+        try:
+            if os.path.isfile(file_path) or os.path.islink(file_path):
+                pass        
+            elif os.path.isdir(file_path):
+                pass
+        except Exception as e:
+            print(f'Operation failed:{file_path}. Reason: {e}')
+        
+    
+    pass
