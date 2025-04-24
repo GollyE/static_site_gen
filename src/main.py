@@ -12,7 +12,8 @@ def main():
     delete_and_copy('public','static')
     #title = (extract_title("This is normal text\n\n# heading1   \n\n\n\n"))
     #print(f"the title is {title} and it is {len(title)} long")
-    generate_page("content/index.md", "template.html", "public/index.html")
+    generate_pages_recursive("content", "template.html", "public")
+    #generate_page("content", "template.html", "public")
     return 
 
 def delete_contents(folder_path):

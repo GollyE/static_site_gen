@@ -12,7 +12,12 @@ def generate_page(rel_from_path, rel_template_path,rel_dest_path):
     with open(Path(rel_template_path), 'r', encoding='utf-8') as template_f:
         template_content = template_f.read()
     # Create destination directory if it doesn't exist
-    os.makedirs(os.path.dirname(rel_dest_path), exist_ok=True)
+    dest_file_name = rel_dest_path.strip(".md")
+    dest_file_name = f"{dest_file_name}.html"
+    print(f"{dest_file_name}")
+
+
+    os.makedirs(os.path.dirname(dest_file_name), exist_ok=True)
     
     md_htmlnode = markdown_to_html_node(markdown_content)
     title = extract_title(markdown_content)
@@ -22,20 +27,26 @@ def generate_page(rel_from_path, rel_template_path,rel_dest_path):
     final_html_content = template_replaced_title.replace("{{ Content }}", html_string)
     
     # Write to destination file
-    with open(rel_dest_path, 'w') as dest_file:
+    with open(dest_file_name, 'w') as dest_file:
         dest_file.write(final_html_content)
 
 def generate_pages_recursive(dir_path_content, template_path, dest_dir_path):
     
     for filename in os.listdir(dir_path_content):
-        file_path = os.path.join(folder_path, filename)
+        file_path = os.path.join(dir_path_content, filename)
+
+        #dest_file_name = filename.strip(".md")
+        #dest_file_name = f"{dest_file_name}.html"
+        dest_file_path = os.path.join(dest_dir_path,filename)
+        
+        print(f"the file path is {file_path}")
+        print(f"the dest file path is {dest_file_path}")
         try:
             if os.path.isfile(file_path) or os.path.islink(file_path):
-                pass        
+                generate_page(file_path,template_path,dest_file_path)   
+                print(f"in file loop with {file_path}, {template_path}, and {dest_file_path}")  
             elif os.path.isdir(file_path):
-                pass
+                generate_pages_recursive(file_path,template_path,dest_file_path)
+                a = f"is directory error"
         except Exception as e:
             print(f'Operation failed:{file_path}. Reason: {e}')
-        
-    
-    pass
