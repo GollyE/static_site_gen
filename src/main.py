@@ -6,14 +6,17 @@ import os
 import shutil
 from pathlib import Path
 from generate_page import *
+import sys
 
 
 def main():
-    delete_and_copy('public','static')
-    #title = (extract_title("This is normal text\n\n# heading1   \n\n\n\n"))
-    #print(f"the title is {title} and it is {len(title)} long")
-    generate_pages_recursive("content", "template.html", "public")
-    #generate_page("content", "template.html", "public")
+    try:
+        basepath = sys.argv[1]
+    except:
+        basepath = "/"
+    delete_and_copy('docs','static')
+    generate_pages_recursive("content", "template.html",'docs',basepath)
+    #print(f'the basepath is{basepath}')
     return 
 
 def delete_contents(folder_path):
